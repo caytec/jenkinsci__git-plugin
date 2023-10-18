@@ -432,6 +432,9 @@ public abstract class SCMTriggerTest extends AbstractGitProject {
         while (entries.hasMoreElements()) {
             ZipEntry entry = entries.nextElement();
             File entryDestination = new File(outputDir, entry.getName());
+            if (!entryDestination.toPath().normalize().startsWith(outputDir.toPath().normalize())) {
+                throw new IOException("Bad zip entry");
+            }
             entryDestination.getParentFile().mkdirs();
             if (entry.isDirectory()) entryDestination.mkdirs();
             else {
